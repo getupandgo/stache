@@ -22,7 +22,7 @@ void inputSetup(int setup);
 void changeStache();
 
 /** Global variables */
-String face_cascade_name = "lbpcascade_frontalface.xml";
+String face_cascade_name = "./cascades/lbpcascade_frontalface.xml";
 CascadeClassifier face_cascade;
 const char * window_name = "stache - OpenCV demo";
 IplImage* mask = 0;
@@ -31,9 +31,9 @@ IplImage* hat = 0;
 
 /** Command-line arguments */
 int numCamera = -1;
-const char* stacheMaskFile = "stache-mask.png";
-const char* glassMaskFile = "glass-mask.png";
-const char* hatMaskFile = "hat-mask.png";
+const char* stacheMaskFile = "./effects/moustache/neat.png";
+const char* glassMaskFile = "./effects/glasses/aviators.png";
+const char* hatMaskFile = "./effects/hats/top-hat-black.png";
 int camWidth = 0;
 int camHeight = 0;
 float camFPS = 0;

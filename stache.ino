@@ -65,7 +65,7 @@ const char * window_name = "stache - OpenCV demo";
 IplImage* mask = 0;
 
 /** Command-line arguments */
-const char* stacheMaskFile = "stache-mask.png";
+const char* stacheMaskFile = "big.png";
 CvCapture* capture;
 Mat frame;
 
