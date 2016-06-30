@@ -1,5 +1,5 @@
-project(stache)
 cmake_minimum_required(VERSION 3.5)
+project(stache)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -16,10 +16,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #endif(QT_FOUND)
 
 find_package( OpenCV REQUIRED )
-if( OpenCV_FOUND )
-    list( APPEND ThirdParty_LIBS ${OpenCV_LIBS} )
-    include_directories( ${OpenCV_INCLUDE_DIRS} )
-endif( OpenCV_FOUND )
+#if( OpenCV_FOUND )
+#    list( APPEND ThirdParty_LIBS ${OpenCV_LIBS} )
+#    include_directories( ${OpenCV_INCLUDE_DIRS} )
+#endif( OpenCV_FOUND )
 
 # uncomment this for OpenMP support
 #FIND_PACKAGE(OpenMP REQUIRED)
@@ -31,7 +31,7 @@ endif( OpenCV_FOUND )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(${PROJECT_NAME}_SOURCES tracker.cpp stache.cpp)
+set(SOURCE_FILES stache.cpp)
 #set(${PROJECT_NAME}_HEADERS test1.h test2.h)
 # currently we don't have any forms-uncomment if you have qt-forms
 #set(${PROJECT_NAME}_FORMS mainwindow.ui)
@@ -44,5 +44,5 @@ set(${PROJECT_NAME}_SOURCES tracker.cpp stache.cpp)
 # use this line if you have used Qt instead the next line
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC} ${${PROJECT_NAME}_HDR_MOC} ${${PROJECT_NAME}_FORMS_HDR} )
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC} ${${PROJECT_NAME}_HDR})
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
