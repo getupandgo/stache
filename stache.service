@@ -1,5 +1,5 @@
 [Unit]
-Description=BeagleStache
+Description=SuperStache
 After=gdm.service
 Requires=gdm.service
 

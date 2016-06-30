@@ -3,6 +3,9 @@ project(stache)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+set(SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 #if you want to have Qt4-support uncomment this
@@ -31,8 +34,10 @@ find_package( OpenCV REQUIRED )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES stache.cpp)
+set(SOURCE_FILES ${SOURCE_PATH}/stache.cpp)
+#for using with headers
 #set(${PROJECT_NAME}_HEADERS test1.h test2.h)
+
 # currently we don't have any forms-uncomment if you have qt-forms
 #set(${PROJECT_NAME}_FORMS mainwindow.ui)
 
@@ -43,6 +48,8 @@ set(SOURCE_FILES stache.cpp)
 
 # use this line if you have used Qt instead the next line
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC} ${${PROJECT_NAME}_HDR_MOC} ${${PROJECT_NAME}_FORMS_HDR} )
+
+# use this if you use headers
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC} ${${PROJECT_NAME}_HDR})
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
