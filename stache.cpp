@@ -14,46 +14,6 @@
 using namespace std;
 using namespace cv;
 
-const char *copyright = "\
- IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING. \n\
- \n\
- By downloading, copying, installing or using the software you agree to this license.\n\
- If you do not agree to this license, do not download, install, copy or use the software.\n\
-\n\
-\n\
-                          License Agreement\n\
-               For Open Source Computer Vision Library\n\
-\n\
-Copyright (C) 2000-2008, Intel Corporation, all rights reserved.\n\
-Copyright (C) 2008-2011, Willow Garage Inc., all rights reserved.\n\
-Copyright (C) 2012-2013, Texas Instruments, all rights reserved.\n\
-Third party copyrights are property of their respective owners.\n\
-\n\
-Redistribution and use in source and binary forms, with or without modification,\n\
-are permitted provided that the following conditions are met:\n\
-\n\
-  * Redistributions of source code must retain the above copyright notice,\n\
-    this list of conditions and the following disclaimer.\n\
-\n\
-  * Redistributions in binary form must reproduce the above copyright notice,\n\
-    this list of conditions and the following disclaimer in the documentation\n\
-    and/or other materials provided with the distribution.\n\
-\n\
-  * The name of the copyright holders may not be used to endorse or promote products\n\
-    derived from this software without specific prior written permission.\n\
-\n\
-This software is provided by the copyright holders and contributors \"as is\" and\n\
-any express or implied warranties, including, but not limited to, the implied\n\
-warranties of merchantability and fitness for a particular purpose are disclaimed.\n\
-In no event shall the Intel Corporation or contributors be liable for any direct,\n\
-indirect, incidental, special, exemplary, or consequential damages\n\
-(including, but not limited to, procurement of substitute goods or services;\n\
-loss of use, data, or profits; or business interruption) however caused\n\
-and on any theory of liability, whether in contract, strict liability,\n\
-or tort (including negligence or otherwise) arising in any way out of\n\
-the use of this software, even if advised of the possibility of such damage.\n\
-\n";
-
 /** Function Headers */
 void detectAndDisplay(Mat frame);
 void saveFrame(Mat frame);
@@ -64,12 +24,16 @@ void changeStache();
 /** Global variables */
 String face_cascade_name = "lbpcascade_frontalface.xml";
 CascadeClassifier face_cascade;
-const char * window_name = "stache - BeagleBone OpenCV demo";
+const char * window_name = "stache - OpenCV demo";
 IplImage* mask = 0;
+IplImage* glasses = 0;
+IplImage* hat = 0;
 
 /** Command-line arguments */
 int numCamera = -1;
 const char* stacheMaskFile = "stache-mask.png";
+const char* glassMaskFile = "glass-mask.png";
+const char* hatMaskFile = "hat-mask.png";
 int camWidth = 0;
 int camHeight = 0;
 float camFPS = 0;
@@ -91,16 +55,18 @@ int main(int argc, const char** argv) {
     stacheFilenames = argv + 1;
   }
 
-  //-- 0. Print the copyright
-  fprintf(stderr, "%s\n", argv[0]);
-  fprintf(stderr, "%s", copyright);
-
   //-- 1. Load the cascade
   if( !face_cascade.load(face_cascade_name) ){ fprintf(stderr, "--(!)Error loading\n"); exit(-1); };
 
   //-- 1a. Load the mustache mask
   mask = cvLoadImage(stacheMaskFile);
   if(!mask) { fprintf(stderr, "Could not load %s\n", stacheMaskFile); exit(-1); }
+
+  glasses = cvLoadImage(glassMaskFile);
+  if(!glasses) { fprintf(stderr, "Could not load %s\n", glassMaskFile); }
+
+  hat = cvLoadImage(hatMaskFile);
+  if(!hat) { fprintf(stderr, "Could not load %s\n", hatMaskFile); exit(-1); }
 
   //-- 2. Read the video stream
   capture = cvCaptureFromCAM(numCamera);
@@ -153,13 +119,24 @@ void detectAndDisplay(Mat frame) {
     int height = faces[i].height; // *4/3;
     int offset = faces[i].y; // - faces[i].height/4;
     if(offset < 0) offset = 0;
-    IplImage *iplMask = cvCreateImage(cvSize(faces[i].width, height),
-      mask->depth, mask->nChannels );
-    cvSetImageROI(&iplFrame, cvRect(faces[i].x, offset,
-      faces[i].width, height));
+
+    IplImage *iplMask = cvCreateImage(cvSize(faces[i].width, height), mask->depth, mask->nChannels );
+    cvSetImageROI(&iplFrame, cvRect(faces[i].x, offset, faces[i].width, height));
     cvResize(mask, iplMask, CV_INTER_LINEAR);
     cvSub(&iplFrame, iplMask, &iplFrame);
     cvResetImageROI(&iplFrame);
+
+    IplImage *iplGlass = cvCreateImage(cvSize(faces[i].width, height), glasses->depth, glasses->nChannels );
+    cvSetImageROI(&iplFrame, cvRect(faces[i].x, offset, faces[i].width, height));
+    cvResize(glasses, iplGlass, CV_INTER_LINEAR);
+    cvSub(&iplFrame, iplGlass, &iplFrame);
+    cvResetImageROI(&iplFrame);
+
+//    IplImage *iplHat = cvCreateImage(cvSize(faces[i].width, height), hat->depth, hat->nChannels );
+//    cvSetImageROI(&iplFrame, cvRect(faces[i].x, offset, faces[i].width, height * 1/3));
+//    cvResize(hat, iplHat, CV_INTER_LINEAR);
+//    cvSub(&iplFrame, iplHat, &iplFrame);
+//    cvResetImageROI(&iplFrame);
   }
 
   if(i>0) {
