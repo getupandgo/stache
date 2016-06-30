@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=BeagleStache
-Comment=Superimposes mustache using OpenCV
-Exec=/home/root/stache/runstache
-Icon=/home/root/stache/beaglestache.png
-Terminal=false
-Type=Application
