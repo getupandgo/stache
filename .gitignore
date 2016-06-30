@@ -36,7 +36,14 @@
 *.exe
 *.out
 *.app
+/bin/
 
+
+### CMake ###
+/CMakeFiles/
+*.cmake
+CMakeCache.txt
+Makefile
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
